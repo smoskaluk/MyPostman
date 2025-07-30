@@ -1,0 +1,274 @@
+{
+	"info": {
+		"_postman_id": "92ba3fd7-9e8d-4150-b4b3-bc6230fb3ab7",
+		"name": "newman",
+		"description": "Tools",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15058208"
+	},
+	"item": [
+		{
+			"name": "create article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Article created successfully\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"    pm.expect(res.article.slug).to.be.a(\"string\");\r",
+							"    pm.globals.set(\"slug\", res.article.slug); // Зберігаємо slug\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"article\": {\r\n    \"title\": \"test article {{$randomInt}}\",\r\n    \"description\": \"Short description\",\r\n    \"body\": \"This is the content of the article\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://conduit-api.bondaracademy.com/api/articles",
+					"protocol": "https",
+					"host": [
+						"conduit-api",
+						"bondaracademy",
+						"com"
+					],
+					"path": [
+						"api",
+						"articles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Article retrieved\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(res.article.title).to.contain(\"test article\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://conduit-api.bondaracademy.com/api/articles/{{slug}}",
+					"protocol": "https",
+					"host": [
+						"conduit-api",
+						"bondaracademy",
+						"com"
+					],
+					"path": [
+						"api",
+						"articles",
+						"{{slug}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update article name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const res = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Article updated\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"    pm.expect(res.article.title).to.contain(\"updated article title\");\r",
+							"    pm.globals.set(\"slug\", res.article.slug);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"article\": {\r\n    \"title\": \"updated article title {{$randomInt}} \"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://conduit-api.bondaracademy.com/api/articles/{{slug}}",
+					"protocol": "https",
+					"host": [
+						"conduit-api",
+						"bondaracademy",
+						"com"
+					],
+					"path": [
+						"api",
+						"articles",
+						"{{slug}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete article",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Article deleted\", () => {\r",
+							"    pm.expect(pm.response.code).to.eql(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://conduit-api.bondaracademy.com/api/articles/{{slug}}",
+					"protocol": "https",
+					"host": [
+						"conduit-api",
+						"bondaracademy",
+						"com"
+					],
+					"path": [
+						"api",
+						"articles",
+						"{{slug}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
